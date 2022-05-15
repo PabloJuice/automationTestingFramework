@@ -33,6 +33,10 @@ public class DriverManager {
 		}
 	}
 
+	public static WebDriverActions actions() {
+		return new WebDriverActions(getDriver());
+	}
+
 	public static WebDriver getDriver() {
 		return webDriver.get();
 	}

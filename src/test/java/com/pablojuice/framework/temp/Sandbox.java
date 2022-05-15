@@ -6,7 +6,7 @@ import org.openqa.selenium.edge.EdgeDriver;
 public class Sandbox {
 	public static void main(String[] args) throws InterruptedException {
 		DriverManager.setup(EdgeDriver.class);
-		DriverManager.getDriver().get("https://www.google.com.ua/");
+		DriverManager.getDriver().get("https://refactoring.guru/");
 		Thread.sleep(5000);
 		DriverManager.closeDriver();
 	}
