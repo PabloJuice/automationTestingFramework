@@ -1,8 +1,8 @@
 package com.pablojuice.framework.drivers;
 
+import com.pablojuice.framework.exceptions.DriverNotFoundException;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.lang.reflect.InvocationTargetException;
@@ -23,8 +23,7 @@ public class DriverManager {
 			tempDriver = impl.getDeclaredConstructor().newInstance();
 		} catch (NoSuchMethodException | InvocationTargetException |
 				InstantiationException | IllegalAccessException e) {
-			e.printStackTrace();
-			tempDriver = new ChromeDriver();
+			throw new DriverNotFoundException(e);
 		}
 		if (webDriver == null) {
 			webDriver = createThreadLocalDriver(tempDriver);
@@ -35,6 +34,10 @@ public class DriverManager {
 
 	public static WebDriverActions actions() {
 		return new WebDriverActions(getDriver());
+	}
+
+	public static boolean hasDriver() {
+		return webDriver != null && webDriver.get() != null;
 	}
 
 	public static WebDriver getDriver() {

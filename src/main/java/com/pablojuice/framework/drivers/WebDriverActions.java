@@ -5,6 +5,7 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 
 import java.awt.*;
 import java.io.File;
@@ -24,6 +25,14 @@ public class WebDriverActions {
 		} catch (NoAlertPresentException e) {
 			return false;
 		}
+	}
+
+	public void moveToElement(WebElement element) {
+		new Actions(driver).moveToElement(element).build();
+	}
+
+	public void doubleClick(WebElement element) {
+		new Actions(driver).doubleClick(element).build();
 	}
 
 	public String getAlertText() {
