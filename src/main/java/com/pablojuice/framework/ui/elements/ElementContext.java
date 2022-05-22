@@ -1,4 +1,4 @@
-package com.pablojuice.framework.elements;
+package com.pablojuice.framework.ui.elements;
 
 
 public interface ElementContext<T extends Element> {

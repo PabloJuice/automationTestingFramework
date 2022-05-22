@@ -1,4 +1,4 @@
-package com.pablojuice.framework.elements;
+package com.pablojuice.framework.ui.elements;
 
 import com.pablojuice.framework.config.FrameworkConfig;
 import com.pablojuice.framework.drivers.DriverManager;

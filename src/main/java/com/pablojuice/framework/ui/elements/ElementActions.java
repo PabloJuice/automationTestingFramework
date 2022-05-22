@@ -1,4 +1,4 @@
-package com.pablojuice.framework.elements;
+package com.pablojuice.framework.ui.elements;
 
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;

@@ -1,6 +1,6 @@
 package com.pablojuice.framework.util;
 
-import com.pablojuice.framework.config.InternalConfig;
+import com.pablojuice.framework.config.FrameworkConfig;
 import com.pablojuice.framework.reports.Reporter;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -10,9 +10,9 @@ import java.util.concurrent.Callable;
 
 
 public class Waiter {
-	public static final int INTERACT_WAIT_S = InternalConfig.ACTION_TIMEOUT;
-	public static final int DISPLAY_WAIT_S = InternalConfig.WAIT_TIMEOUT;
-	public static final int INTERVAL_MS = InternalConfig.INTERVAL_MS;
+	public static final int INTERACT_WAIT_S = FrameworkConfig.ACTION_TIMEOUT;
+	public static final int DISPLAY_WAIT_S = FrameworkConfig.WAIT_TIMEOUT;
+	public static final int INTERVAL_MS = FrameworkConfig.INTERVAL_MS;
 
 	public static Pair<Boolean, Integer> wait(int sec, Callable<Boolean> callable) {
 		final List<Integer> time = new ArrayList<>();
@@ -44,7 +44,7 @@ public class Waiter {
 		final String MESSAGE =
 				"Waiting for condition : " + shortConditionText + ". Timeout : " + timeout + " sec" + ". Time passed : " + result.getValue() + " ms.";
 		if (result.getKey()) {
-			if (InternalConfig.WAIT_REPORTING) {
+			if (FrameworkConfig.WAIT_REPORTING) {
 				Reporter.info(MESSAGE + " - SUCCESS", fullDescription);
 			}
 		} else {

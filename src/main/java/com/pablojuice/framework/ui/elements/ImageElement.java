@@ -1,4 +1,4 @@
-package com.pablojuice.framework.elements;
+package com.pablojuice.framework.ui.elements;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
