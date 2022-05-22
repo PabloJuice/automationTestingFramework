@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 import static java.lang.String.format;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
-abstract class AbstractElement implements Element {
+public abstract class AbstractElement implements Element {
 
 	@Getter
 	private final WebElement webElement;
