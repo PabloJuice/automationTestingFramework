@@ -1,7 +1,9 @@
 package com.pablojuice.framework.elements;
 
+import com.pablojuice.framework.config.FrameworkConfig;
 import com.pablojuice.framework.drivers.DriverManager;
 import com.pablojuice.framework.drivers.WebDriverActions;
+import com.pablojuice.framework.reports.Reporter;
 import com.pablojuice.framework.util.Waiter;
 import lombok.Getter;
 import org.apache.commons.lang3.tuple.Pair;
@@ -13,6 +15,7 @@ import org.openqa.selenium.WebElement;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
@@ -44,6 +47,13 @@ abstract class AbstractElement implements Element {
 		final Pair<Boolean, Integer> result = Waiter.wait(timeout, condition);
 		final String MESSAGE =
 				"Waiting for condition : " + shortConditionText + ". Timeout : " + timeout + " sec" + ". Time passed : " + result.getValue() + " ms.";
+		if (result.getKey()) {
+			if (FrameworkConfig.WAIT_REPORTING) {
+				Reporter.info(MESSAGE + " - SUCCESS", toString());
+			}
+		} else {
+			Reporter.error(MESSAGE + " - FAIL", toString());
+		}
 	}
 
 	@Override
@@ -261,6 +271,11 @@ abstract class AbstractElement implements Element {
 		}, "The top scroll to the element. The element will be at the top.", false, true, false);
 	}
 
+	protected void reportAction(String message) {
+		final String simpleMessage = "Action on the element: [" + getClass().getSimpleName() + "]";
+		Reporter.info(simpleMessage + message, message + this);
+	}
+
 	protected <T> T callAction(Runnable runnable, String message) {
 		return callAction(runnable, message, true, true, true);
 	}
@@ -306,6 +321,12 @@ abstract class AbstractElement implements Element {
 			} catch (Exception e) {
 				ex = e;
 				retries++;
+			} finally {
+				if (isReporting && FrameworkConfig.ELEMENT_REPORTING) {
+					reportAction(message + System.lineSeparator() + "Result : " + Objects.requireNonNullElse(result,
+																											 "empty") + System.lineSeparator());
+				}
+
 			}
 		}
 		throw exception(ex);
