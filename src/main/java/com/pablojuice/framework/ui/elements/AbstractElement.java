@@ -3,13 +3,14 @@ package com.pablojuice.framework.ui.elements;
 import com.pablojuice.framework.config.FrameworkConfig;
 import com.pablojuice.framework.drivers.DriverManager;
 import com.pablojuice.framework.drivers.WebDriverActions;
+import com.pablojuice.framework.exceptions.UIException;
 import com.pablojuice.framework.reports.Reporter;
 import com.pablojuice.framework.util.Waiter;
 import lombok.Getter;
 import org.apache.commons.lang3.tuple.Pair;
 import org.openqa.selenium.By;
+import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
 import java.time.Instant;
@@ -44,7 +45,7 @@ public abstract class AbstractElement implements Element {
 	}
 
 	protected void callWait(int timeout, Callable<Boolean> condition, String shortConditionText) {
-		final Pair<Boolean, Integer> result = Waiter.wait(timeout, condition);
+		final Pair<Boolean, Long> result = Waiter.waitUntil(timeout, condition);
 		final String MESSAGE =
 				"Waiting for condition : " + shortConditionText + ". Timeout : " + timeout + " sec" + ". Time passed : " + result.getValue() + " ms.";
 		if (result.getKey()) {
@@ -286,7 +287,10 @@ public abstract class AbstractElement implements Element {
 											   boolean readyCheck,
 											   boolean preActions) {
 		return callAction(() -> {
-			runnable.run();
+			try {
+				runnable.run();
+			} catch (ElementClickInterceptedException ignored) {
+			}
 			return (T) this;
 		}, message, isReporting, readyCheck, preActions);
 	}
@@ -326,17 +330,12 @@ public abstract class AbstractElement implements Element {
 					reportAction(message + System.lineSeparator() + "Result : " + Objects.requireNonNullElse(result,
 																											 "empty") + System.lineSeparator());
 				}
-
 			}
 		}
-		throw exception(ex);
+		throw new UIException(ex);
 	}
 
 	protected abstract void callPreActions();
-
-	private NoSuchElementException exception(Exception ex) {
-		return new NoSuchElementException("The base element could not be found : " + this, ex);
-	}
 
 	@Override
 	public BaseElement createBaseElement(By by) {
@@ -346,13 +345,11 @@ public abstract class AbstractElement implements Element {
 	@Override
 	public List<BaseElement> createBaseElements(By by) {
 		return getWebElement().findElements(by).stream().map(BaseElement::new).collect(Collectors.toList());
-
 	}
 
 	@Override
 	public ImageElement createImageElement(By by) {
 		return new ImageElement(getWebElement().findElement(by));
-
 	}
 
 	@Override
@@ -378,7 +375,6 @@ public abstract class AbstractElement implements Element {
 	@Override
 	public List<TextInputElement> createTextInputElements(By by) {
 		return getWebElement().findElements(by).stream().map(TextInputElement::new).collect(Collectors.toList());
-
 	}
 
 	@Override
@@ -389,7 +385,6 @@ public abstract class AbstractElement implements Element {
 	@Override
 	public List<SelectListElement> createSelectListElements(By by) {
 		return getWebElement().findElements(by).stream().map(SelectListElement::new).collect(Collectors.toList());
-
 	}
 
 	@Override
@@ -405,7 +400,6 @@ public abstract class AbstractElement implements Element {
 	@Override
 	public List<TableElement> createTableElements(By by) {
 		return getWebElement().findElements(by).stream().map(TableElement::new).collect(Collectors.toList());
-
 	}
 
 	@Override
@@ -416,7 +410,6 @@ public abstract class AbstractElement implements Element {
 	@Override
 	public List<TableRowElement> createTableRowElements(By by) {
 		return getWebElement().findElements(by).stream().map(TableRowElement::new).collect(Collectors.toList());
-
 	}
 
 	@Override

@@ -15,4 +15,10 @@ public class TextAreaElement extends BaseElement {
 	public TextAreaElement(WebElement webElement) {
 		super(webElement);
 	}
+
+	public void setText(String text) {
+		if (text != null) {
+			getWebElement().sendKeys(text);
+		}
+	}
 }

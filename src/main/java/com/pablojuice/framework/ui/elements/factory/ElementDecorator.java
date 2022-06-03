@@ -26,7 +26,7 @@ public class ElementDecorator implements FieldDecorator {
 
 	@Override
 	public Object decorate(ClassLoader loader, Field field) {
-		if (!(Element.class.isAssignableFrom(field.getType()) || isDecoratableList(field))) {
+		if (!(Element.class.isAssignableFrom(field.getType()) && isDecoratable(field))) {
 			return null;
 		}
 		ElementLocator locator = factory.createLocator(field);
@@ -62,6 +62,10 @@ public class ElementDecorator implements FieldDecorator {
 		if (erasureClass == null || !WebElement.class.isAssignableFrom(erasureClass)) {
 			return false;
 		}
+		return isDecoratable(field);
+	}
+
+	private boolean isDecoratable(Field field) {
 		return field.getAnnotation(FindBy.class) != null || field.getAnnotation(FindBys.class) != null;
 	}
 
