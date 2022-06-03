@@ -1,13 +1,15 @@
 package com.pablojuice.framework.data.provider;
 
 import com.pablojuice.framework.data.entities.BaseEntity;
-import com.pablojuice.framework.data.services.BaseService;
+import com.pablojuice.framework.data.services.UserCredentialsService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class DBProvider implements BaseProvider {
 
-	private final BaseService service;
+	@Autowired
+	private final UserCredentialsService service;
 
-	public DBProvider(BaseService service) {
+	public DBProvider(UserCredentialsService service) {
 		this.service = service;
 	}
 
