@@ -100,7 +100,6 @@ public class Reporter {
 
 	public static void screen(String message) {
 		step(Type.ATTACHMENT, "screen", null, () -> attachment.attachScreen(message), null);
-
 	}
 
 	@Step("{0} : {1}")

@@ -1,17 +1,23 @@
 package com.pablojuice.framework.ui.refactoring;
 
-import com.pablojuice.framework.drivers.DriverManager;
-import com.pablojuice.framework.ui.base.BaseUITest;
-import org.testng.Assert;
+import com.pablojuice.framework.base.BaseUITest;
 import org.testng.annotations.Test;
 
 @Test
 public class RefactoringTest extends BaseUITest {
 
-	public void test() throws InterruptedException {
-		DriverManager.getDriver().get("https://refactoring.guru/");
-		//Thread.sleep(3000);
-		RefactoringPage page = RefactoringPage.initialize(DriverManager.getDriver());
-		Assert.assertEquals(page.element.isDisplayed(), true);
+	/*
+	 * TEST CASE No5
+	 * Refactoring page navigation test
+	 * */
+	@Override
+	public void test() {
+		RefactoringBiz refactoringBiz = new RefactoringBiz();
+		refactoringBiz.openFirstPage().checkCurrentPage().navigateNextPage();
+		refactoringBiz.openSecondPage().checkCurrentPage().navigateNextPage();
+		refactoringBiz.openThirdPage().checkCurrentPage().navigateNextPage();
+		refactoringBiz.openFourthPage().checkCurrentPage().navigateNextPage();
+		refactoringBiz.openFifthPage().checkCurrentPage().navigateNextPage();
+		refactoringBiz.openSixthPage().checkCurrentPage().navigateNextPage();
 	}
 }
