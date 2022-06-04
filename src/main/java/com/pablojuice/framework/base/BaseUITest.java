@@ -1,4 +1,4 @@
-package com.pablojuice.framework.ui.base;
+package com.pablojuice.framework.base;
 
 import com.pablojuice.framework.drivers.DriverManager;
 import org.openqa.selenium.chrome.ChromeDriver;

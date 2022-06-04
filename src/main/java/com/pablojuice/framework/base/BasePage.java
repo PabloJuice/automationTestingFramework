@@ -1,4 +1,4 @@
-package com.pablojuice.framework.ui.base;
+package com.pablojuice.framework.base;
 
 import org.openqa.selenium.WebDriver;
 
