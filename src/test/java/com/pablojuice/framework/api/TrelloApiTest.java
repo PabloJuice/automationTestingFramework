@@ -23,6 +23,9 @@ public class TrelloApiTest {
 				.createBoard()
 				.checkIfBoardExists()
 				.createCardList()
+				.createCard()
+				.createCard()
+				.createCard()
 				.deleteBoard();
 	}
 
@@ -50,5 +53,16 @@ public class TrelloApiTest {
 				.createCardList()
 				.moveCardsToAnotherList()
 				.deleteBoard();
+	}
+
+	@Test
+	public void testTrelloOrgApi() {
+		trelloApiBiz
+				.createOrganisation()
+				.createBoard()
+				.checkIfBoardExists()
+				.renameBoard()
+				.deleteBoard()
+				.deleteOrganisation();
 	}
 }

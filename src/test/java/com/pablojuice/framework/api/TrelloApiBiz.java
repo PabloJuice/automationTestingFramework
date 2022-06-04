@@ -24,6 +24,7 @@ public class TrelloApiBiz extends BaseBiz {
 	private final List<String> boardIDs = new ArrayList<>();
 	private final List<String> listIDs = new ArrayList<>();
 	private final List<String> cardIDs = new ArrayList<>();
+	private final List<String> orgIDs = new ArrayList<>();
 
 	public TrelloApiBiz(String apiKey, String apiToken) {
 		this.apiKey = apiKey;
@@ -38,7 +39,7 @@ public class TrelloApiBiz extends BaseBiz {
 				.queryParam("name", randomBoardName)
 				.post("/boards")
 				.then()
-				.statusCode(200)
+				.statusCode(StatusCode.OK.value)
 				.contentType(ContentType.JSON)
 				.assertThat()
 				.body("name", equalTo(randomBoardName))
@@ -54,7 +55,7 @@ public class TrelloApiBiz extends BaseBiz {
 				.get("/boards/" + getLatestBoardID())
 				.then()
 				.assertThat()
-				.statusCode(200);
+				.statusCode(StatusCode.OK.value);
 		return this;
 	}
 
@@ -65,7 +66,7 @@ public class TrelloApiBiz extends BaseBiz {
 				.queryParam("name", newBoardName)
 				.put("/boards/" + getLatestBoardID())
 				.then()
-				.statusCode(200)
+				.statusCode(StatusCode.OK.value)
 				.contentType(ContentType.JSON)
 				.assertThat()
 				.body("name", equalTo(newBoardName));
@@ -77,7 +78,7 @@ public class TrelloApiBiz extends BaseBiz {
 		givenTrelloRequest()
 				.delete("/boards/" + getLatestBoardID())
 				.then()
-				.statusCode(200);
+				.statusCode(StatusCode.OK.value);
 		return this;
 	}
 
@@ -89,7 +90,7 @@ public class TrelloApiBiz extends BaseBiz {
 						.queryParam("name", randomListName)
 						.post("/boards/" + getLatestBoardID() + "/lists")
 						.then()
-						.statusCode(200)
+						.statusCode(StatusCode.OK.value)
 						.contentType(ContentType.JSON)
 						.assertThat()
 						.body("name", equalTo(randomListName))
@@ -103,9 +104,10 @@ public class TrelloApiBiz extends BaseBiz {
 		Assert.assertTrue(listIDs.size() > 1);
 		givenTrelloRequest()
 				.queryParam("idList", getLatestListID())
+				.queryParam("idBoard", getLatestBoardID())
 				.post("/lists/" + listIDs.get(listIDs.size() - 2) + "/moveAllCards")
 				.then()
-				.statusCode(200)
+				.statusCode(StatusCode.OK.value)
 				.contentType(ContentType.JSON);
 		return this;
 	}
@@ -120,7 +122,7 @@ public class TrelloApiBiz extends BaseBiz {
 						.queryParam("desc", "initial Test Description")
 						.post("/cards")
 						.then()
-						.statusCode(200)
+						.statusCode(StatusCode.OK.value)
 						.contentType(ContentType.JSON)
 						.assertThat()
 						.body("name", equalTo(randomCardName))
@@ -136,7 +138,7 @@ public class TrelloApiBiz extends BaseBiz {
 				.queryParam("desc", "edited Test Description")
 				.put("/cards/" + getLatestCardID())
 				.then()
-				.statusCode(200)
+				.statusCode(StatusCode.OK.value)
 				.contentType(ContentType.JSON)
 				.assertThat()
 				.body("desc", equalTo("edited Test Description"))
@@ -150,7 +152,7 @@ public class TrelloApiBiz extends BaseBiz {
 				.queryParam("text", "testComment")
 				.post("/cards/" + getLatestCardID() + "/actions/comments")
 				.then()
-				.statusCode(200);
+				.statusCode(StatusCode.OK.value);
 		return this;
 	}
 
@@ -159,7 +161,32 @@ public class TrelloApiBiz extends BaseBiz {
 		givenTrelloRequest()
 				.delete("/cards/" + getLatestCardID())
 				.then()
-				.statusCode(200);
+				.statusCode(StatusCode.OK.value);
+		return this;
+	}
+
+	public TrelloApiBiz createOrganisation() {
+		orgIDs.add(
+				givenTrelloRequest()
+						.queryParam("displayName", "newOrg" + getRandomString())
+						.when()
+						.post("/organizations")
+						.then()
+						.statusCode(StatusCode.OK.value)
+						.extract()
+						.path("id")
+		);
+		Assert.assertNotNull(getLatestOrgID(), "Org id is null");
+		return this;
+	}
+
+	public TrelloApiBiz deleteOrganisation() {
+		Assert.assertNotNull(getLatestOrgID(), "Org id is null");
+		givenTrelloRequest()
+				.when()
+				.delete("/organizations/" + getLatestOrgID())
+				.then()
+				.statusCode(StatusCode.OK.value);
 		return this;
 	}
 
@@ -180,6 +207,13 @@ public class TrelloApiBiz extends BaseBiz {
 	private String getLatestCardID() {
 		if (cardIDs.size() > 0) {
 			return cardIDs.get(cardIDs.size() - 1);
+		}
+		return null;
+	}
+
+	private String getLatestOrgID() {
+		if (orgIDs.size() > 0) {
+			return orgIDs.get(orgIDs.size() - 1);
 		}
 		return null;
 	}
