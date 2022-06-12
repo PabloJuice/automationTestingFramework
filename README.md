@@ -1,6 +1,6 @@
 Individual AQA framework task
 
-allure serve allure-reports
+allure serve allure-results
 
 1. Implement DriverPool for multiple drivers (at least chrome and firefox) +
 2. Implement PageObject architecture with TC->BO->PO layers +

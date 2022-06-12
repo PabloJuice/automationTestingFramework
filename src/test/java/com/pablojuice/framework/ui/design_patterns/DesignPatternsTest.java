@@ -1,9 +1,15 @@
 package com.pablojuice.framework.ui.design_patterns;
 
 import com.pablojuice.framework.base.BaseUITest;
+import com.pablojuice.framework.data.SpringConfiguration;
+import com.pablojuice.framework.reports.AllureListener;
+import org.springframework.test.context.ContextConfiguration;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 @Test
+@Listeners(AllureListener.class)
+@ContextConfiguration(classes = SpringConfiguration.class)
 public class DesignPatternsTest extends BaseUITest {
 
 	/*

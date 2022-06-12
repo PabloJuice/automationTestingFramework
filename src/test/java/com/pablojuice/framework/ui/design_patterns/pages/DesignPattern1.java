@@ -5,6 +5,7 @@ import com.pablojuice.framework.ui.elements.TextElement;
 import com.pablojuice.framework.ui.elements.factory.WrappedPageFactory;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 
 public class DesignPattern1 extends BaseDesignPattern {
 	@FindBy(xpath = "/html[1]/body[1]/div[1]/main[1]/div[1]/div[1]/div[1]/h1[1]/span[2]")
@@ -21,6 +22,7 @@ public class DesignPattern1 extends BaseDesignPattern {
 		DesignPattern1 page = WrappedPageFactory.initElements(webDriver, DesignPattern1.class);
 		page.setLogoLabel(page.logoLabel);
 		page.setNavigateNextButton(page.navigateNextButton);
+		Assert.fail();
 		return page;
 	}
 }
